@@ -328,6 +328,39 @@ START_TEST(s21_expression_ends_on_operator_0) {
   ck_assert_int_eq(s21_validate("cos(30)+sin(45)*tan(60)+cos", &p), 0);
 }
 END_TEST
+START_TEST(s21_two_decimal_points_0) {
+  char out[MAX_EXP_LEN + 1] = {0};
+  char* p = out;
+  ck_assert_int_eq(s21_validate("2+2.25+3.25.48-3", &p), 0);
+}
+END_TEST
+START_TEST(s21_loose_decimal_points_0) {
+  char out[MAX_EXP_LEN + 1] = {0};
+  char* p = out;
+  ck_assert_int_eq(s21_validate("cos(30).sin(5)", &p), 0);
+}
+END_TEST
+
+START_TEST(s21_loose_decimal_points_1) {
+  char out[MAX_EXP_LEN + 1] = {0};
+  char* p = out;
+  ck_assert_int_eq(s21_validate("cos(30).5+2", &p), 0);
+}
+END_TEST
+
+START_TEST(s21_loose_decimal_points_2) {
+  char out[MAX_EXP_LEN + 1] = {0};
+  char* p = out;
+  ck_assert_int_eq(s21_validate(".5-8", &p), 0);
+}
+END_TEST
+
+START_TEST(s21_loose_decimal_points_3) {
+  char out[MAX_EXP_LEN + 1] = {0};
+  char* p = out;
+  ck_assert_int_eq(s21_validate("5+7-2^2.", &p), 0);
+}
+END_TEST
 
 Suite* s21_incorrect_exp_tests(void) {
   Suite* s1 = suite_create(PRE_TEST_HEADER "S21_INCORRECT" POST_TEST_HEADER);
@@ -336,6 +369,8 @@ Suite* s21_incorrect_exp_tests(void) {
   TCase* tc1_3 = tcase_create("S21_SEVERAL_OPERATORS");
   TCase* tc1_4 = tcase_create("S21_FUNCTIONS_WITHOUT_PARENTHESES");
   TCase* tc1_5 = tcase_create("S21_EXPRESSION_ENDS_ON_OPERATOR");
+  TCase* tc1_6 = tcase_create("S21_TWO_DECIMAL_POINTS");
+  TCase* tc1_7 = tcase_create("S21_LOOSE_DECIMAL_POINTS");
 
   suite_add_tcase(s1, tc1_1);
   tcase_add_test(tc1_1, s21_mismatched_brackets_0);
@@ -389,6 +424,13 @@ Suite* s21_incorrect_exp_tests(void) {
   tcase_add_test(tc1_4, s21_functions_without_parentheses_9);
   suite_add_tcase(s1, tc1_5);
   tcase_add_test(tc1_5, s21_expression_ends_on_operator_0);
+  suite_add_tcase(s1, tc1_6);
+  tcase_add_test(tc1_6, s21_two_decimal_points_0);
+  suite_add_tcase(s1, tc1_7);
+  tcase_add_test(tc1_7, s21_loose_decimal_points_0);
+  tcase_add_test(tc1_7, s21_loose_decimal_points_1);
+  tcase_add_test(tc1_7, s21_loose_decimal_points_2);
+  tcase_add_test(tc1_7, s21_loose_decimal_points_3);
 
   return s1;
 }
