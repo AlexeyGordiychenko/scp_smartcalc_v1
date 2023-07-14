@@ -38,5 +38,7 @@ bool s21_is_operator(int type);
 bool s21_is_value(int type);
 bool s21_is_function(int type);
 bool s21_is_unary_operator(int type);
+double s21_calculate_unary(double value, char type);
+double s21_calculate_binary(double value1, double value2, char type);
 
 #endif  // S21_UTILS_H
