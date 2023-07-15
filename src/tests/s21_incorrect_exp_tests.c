@@ -4,6 +4,7 @@
  */
 
 #include "s21_calc_tests.h"
+
 START_TEST(s21_mismatched_brackets_0) {
   char out[MAX_EXP_LEN + 1] = {0};
   char* p = out;
