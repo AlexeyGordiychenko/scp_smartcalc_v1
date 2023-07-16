@@ -417,13 +417,6 @@ static double s21_calculate_binary(double value1, double value2, char type) {
   return res;
 }
 
-double s21_calculate_plain_exp(char *exp, double x) {
-  struct token *rpn = s21_exp_to_rpn(exp);
-  double res = s21_calculate(rpn, x);
-  free(rpn);
-  return res;
-}
-
 double s21_calculate(struct token *rpn, double x) {
   struct token *numbers = calloc(1, sizeof(struct token));
   struct token *p_rpn = rpn;
