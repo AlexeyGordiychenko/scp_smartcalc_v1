@@ -448,7 +448,10 @@ double s21_calculate(struct token *rpn, double x) {
 struct token *s21_exp_to_rpn(char *exp) {
   char *exp_validated = malloc(strlen(exp) * 3 + 1);
   int exp_count = s21_validate(exp, &exp_validated);
-  struct token *rpn = s21_validated_exp_to_rpn(exp_validated, exp_count);
+  struct token *rpn = NULL;
+  if (exp_count > 0) {
+    rpn = s21_validated_exp_to_rpn(exp_validated, exp_count);
+  }
   free(exp_validated);
   return rpn;
 }
