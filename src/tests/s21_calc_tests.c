@@ -7,7 +7,7 @@ int main(void) {
   for (int i = 0; calc_tests[i] != NULL; i++) {
     SRunner *sr = srunner_create(calc_tests[i]);
 
-    srunner_set_fork_status(sr, CK_FORK);
+    srunner_set_fork_status(sr, CK_NOFORK);
     srunner_run_all(sr, CK_NORMAL);
 
     failed += srunner_ntests_failed(sr);

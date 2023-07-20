@@ -6,360 +6,256 @@
 #include "s21_calc_tests.h"
 
 START_TEST(s21_mismatched_brackets_0) {
-  char out[MAX_EXP_LEN + 1] = {0};
-  char* p = out;
-  ck_assert_int_eq(s21_validate("(2+3*((5-2)+(3+4)*(2-1)", &p), 0);
+  ck_assert_int_eq(s21_exp_to_rpn("(2+3*((5-2)+(3+4)*(2-1)") == NULL, 1);
 }
 END_TEST
 
 START_TEST(s21_mismatched_brackets_1) {
-  char out[MAX_EXP_LEN + 1] = {0};
-  char* p = out;
-  ck_assert_int_eq(s21_validate("(2+3)((5-2)+(3+4)(2-1)))", &p), 0);
+  ck_assert_int_eq(s21_exp_to_rpn("(2+3)((5-2)+(3+4)(2-1)))") == NULL, 1);
 }
 END_TEST
 
 START_TEST(s21_mismatched_brackets_2) {
-  char out[MAX_EXP_LEN + 1] = {0};
-  char* p = out;
-  ck_assert_int_eq(s21_validate("(23^2+45^2-sqrt(9)", &p), 0);
+  ck_assert_int_eq(s21_exp_to_rpn("(23^2+45^2-sqrt(9)") == NULL, 1);
 }
 END_TEST
 
 START_TEST(s21_mismatched_brackets_3) {
-  char out[MAX_EXP_LEN + 1] = {0};
-  char* p = out;
-  ck_assert_int_eq(s21_validate("(ln((e^3))^2)+log(10^2)", &p), 0);
+  ck_assert_int_eq(s21_exp_to_rpn("(ln((e^3))^2)+log(10^2)") == NULL, 1);
 }
 END_TEST
 
 START_TEST(s21_mismatched_brackets_4) {
-  char out[MAX_EXP_LEN + 1] = {0};
-  char* p = out;
-  ck_assert_int_eq(s21_validate("sqrt((16+9)*2^3))", &p), 0);
+  ck_assert_int_eq(s21_exp_to_rpn("sqrt((16+9)*2^3))") == NULL, 1);
 }
 END_TEST
 
 START_TEST(s21_mismatched_brackets_5) {
-  char out[MAX_EXP_LEN + 1] = {0};
-  char* p = out;
-  ck_assert_int_eq(s21_validate("(asin(0.5)^2+atan(1)^2-", &p), 0);
+  ck_assert_int_eq(s21_exp_to_rpn("(asin(0.5)^2+atan(1)^2-") == NULL, 1);
 }
 END_TEST
 
 START_TEST(s21_mismatched_brackets_6) {
-  char out[MAX_EXP_LEN + 1] = {0};
-  char* p = out;
-  ck_assert_int_eq(s21_validate("((2+sin(30))*2", &p), 0);
+  ck_assert_int_eq(s21_exp_to_rpn("((2+sin(30))*2") == NULL, 1);
 }
 END_TEST
 
 START_TEST(s21_mismatched_brackets_7) {
-  char out[MAX_EXP_LEN + 1] = {0};
-  char* p = out;
-  ck_assert_int_eq(s21_validate("(sqrt(16+92)*3))", &p), 0);
+  ck_assert_int_eq(s21_exp_to_rpn("(sqrt(16+92)*3))") == NULL, 1);
 }
 END_TEST
 
 START_TEST(s21_mismatched_brackets_8) {
-  char out[MAX_EXP_LEN + 1] = {0};
-  char* p = out;
-  ck_assert_int_eq(s21_validate("(((2+3)((5-2)+(3+4)(2-1))", &p), 0);
+  ck_assert_int_eq(s21_exp_to_rpn("(((2+3)((5-2)+(3+4)(2-1))") == NULL, 1);
 }
 END_TEST
 
 START_TEST(s21_mismatched_brackets_9) {
-  char out[MAX_EXP_LEN + 1] = {0};
-  char* p = out;
-  ck_assert_int_eq(s21_validate("sin(30)+cos(60--tan(45)", &p), 0);
+  ck_assert_int_eq(s21_exp_to_rpn("sin(30)+cos(60--tan(45)") == NULL, 1);
 }
 END_TEST
 START_TEST(s21_incorrect_unary_0) {
-  char out[MAX_EXP_LEN + 1] = {0};
-  char* p = out;
-  ck_assert_int_eq(s21_validate("-3*-5+15-4", &p), 0);
+  ck_assert_int_eq(s21_exp_to_rpn("-3*-5+15-4") == NULL, 1);
 }
 END_TEST
 
 START_TEST(s21_incorrect_unary_1) {
-  char out[MAX_EXP_LEN + 1] = {0};
-  char* p = out;
-  ck_assert_int_eq(s21_validate("--4/2", &p), 0);
+  ck_assert_int_eq(s21_exp_to_rpn("--4/2") == NULL, 1);
 }
 END_TEST
 
 START_TEST(s21_incorrect_unary_2) {
-  char out[MAX_EXP_LEN + 1] = {0};
-  char* p = out;
-  ck_assert_int_eq(s21_validate("-+10^2", &p), 0);
+  ck_assert_int_eq(s21_exp_to_rpn("-+10^2") == NULL, 1);
 }
 END_TEST
 
 START_TEST(s21_incorrect_unary_3) {
-  char out[MAX_EXP_LEN + 1] = {0};
-  char* p = out;
-  ck_assert_int_eq(s21_validate("--+3", &p), 0);
+  ck_assert_int_eq(s21_exp_to_rpn("--+3") == NULL, 1);
 }
 END_TEST
 
 START_TEST(s21_incorrect_unary_4) {
-  char out[MAX_EXP_LEN + 1] = {0};
-  char* p = out;
-  ck_assert_int_eq(s21_validate("+-3", &p), 0);
+  ck_assert_int_eq(s21_exp_to_rpn("+-3") == NULL, 1);
 }
 END_TEST
 
 START_TEST(s21_incorrect_unary_5) {
-  char out[MAX_EXP_LEN + 1] = {0};
-  char* p = out;
-  ck_assert_int_eq(s21_validate("5%-2", &p), 0);
+  ck_assert_int_eq(s21_exp_to_rpn("5%-2") == NULL, 1);
 }
 END_TEST
 
 START_TEST(s21_incorrect_unary_6) {
-  char out[MAX_EXP_LEN + 1] = {0};
-  char* p = out;
-  ck_assert_int_eq(s21_validate("2*-", &p), 0);
+  ck_assert_int_eq(s21_exp_to_rpn("2*-") == NULL, 1);
 }
 END_TEST
 
 START_TEST(s21_incorrect_unary_7) {
-  char out[MAX_EXP_LEN + 1] = {0};
-  char* p = out;
-  ck_assert_int_eq(s21_validate("--3/42", &p), 0);
+  ck_assert_int_eq(s21_exp_to_rpn("--3/42") == NULL, 1);
 }
 END_TEST
 
 START_TEST(s21_incorrect_unary_8) {
-  char out[MAX_EXP_LEN + 1] = {0};
-  char* p = out;
-  ck_assert_int_eq(s21_validate("-3*/5", &p), 0);
+  ck_assert_int_eq(s21_exp_to_rpn("-3*/5") == NULL, 1);
 }
 END_TEST
 
 START_TEST(s21_incorrect_unary_9) {
-  char out[MAX_EXP_LEN + 1] = {0};
-  char* p = out;
-  ck_assert_int_eq(s21_validate("6+-", &p), 0);
+  ck_assert_int_eq(s21_exp_to_rpn("6+-") == NULL, 1);
 }
 END_TEST
 
 START_TEST(s21_incorrect_unary_10) {
-  char out[MAX_EXP_LEN + 1] = {0};
-  char* p = out;
-  ck_assert_int_eq(s21_validate("7/-", &p), 0);
+  ck_assert_int_eq(s21_exp_to_rpn("7/-") == NULL, 1);
 }
 END_TEST
 
 START_TEST(s21_incorrect_unary_11) {
-  char out[MAX_EXP_LEN + 1] = {0};
-  char* p = out;
-  ck_assert_int_eq(s21_validate("(+-+-8)", &p), 0);
+  ck_assert_int_eq(s21_exp_to_rpn("(+-+-8)") == NULL, 1);
 }
 END_TEST
 
 START_TEST(s21_incorrect_unary_12) {
-  char out[MAX_EXP_LEN + 1] = {0};
-  char* p = out;
-  ck_assert_int_eq(s21_validate("-9*-", &p), 0);
+  ck_assert_int_eq(s21_exp_to_rpn("-9*-") == NULL, 1);
 }
 END_TEST
 
 START_TEST(s21_incorrect_unary_13) {
-  char out[MAX_EXP_LEN + 1] = {0};
-  char* p = out;
-  ck_assert_int_eq(s21_validate("++10/3", &p), 0);
+  ck_assert_int_eq(s21_exp_to_rpn("++10/3") == NULL, 1);
 }
 END_TEST
 
 START_TEST(s21_incorrect_unary_14) {
-  char out[MAX_EXP_LEN + 1] = {0};
-  char* p = out;
-  ck_assert_int_eq(s21_validate("5*-(--3)", &p), 0);
+  ck_assert_int_eq(s21_exp_to_rpn("5*-(--3)") == NULL, 1);
 }
 END_TEST
 
 START_TEST(s21_incorrect_unary_15) {
-  char out[MAX_EXP_LEN + 1] = {0};
-  char* p = out;
-  ck_assert_int_eq(s21_validate("-4/-", &p), 0);
+  ck_assert_int_eq(s21_exp_to_rpn("-4/-") == NULL, 1);
 }
 END_TEST
 START_TEST(s21_several_operators_0) {
-  char out[MAX_EXP_LEN + 1] = {0};
-  char* p = out;
-  ck_assert_int_eq(s21_validate("2++2", &p), 0);
+  ck_assert_int_eq(s21_exp_to_rpn("2++2") == NULL, 1);
 }
 END_TEST
 
 START_TEST(s21_several_operators_1) {
-  char out[MAX_EXP_LEN + 1] = {0};
-  char* p = out;
-  ck_assert_int_eq(s21_validate("3**5+15-4", &p), 0);
+  ck_assert_int_eq(s21_exp_to_rpn("3**5+15-4") == NULL, 1);
 }
 END_TEST
 
 START_TEST(s21_several_operators_2) {
-  char out[MAX_EXP_LEN + 1] = {0};
-  char* p = out;
-  ck_assert_int_eq(s21_validate("4//2", &p), 0);
+  ck_assert_int_eq(s21_exp_to_rpn("4//2") == NULL, 1);
 }
 END_TEST
 
 START_TEST(s21_several_operators_3) {
-  char out[MAX_EXP_LEN + 1] = {0};
-  char* p = out;
-  ck_assert_int_eq(s21_validate("10^^2", &p), 0);
+  ck_assert_int_eq(s21_exp_to_rpn("10^^2") == NULL, 1);
 }
 END_TEST
 
 START_TEST(s21_several_operators_4) {
-  char out[MAX_EXP_LEN + 1] = {0};
-  char* p = out;
-  ck_assert_int_eq(s21_validate("5%%2", &p), 0);
+  ck_assert_int_eq(s21_exp_to_rpn("5%%2") == NULL, 1);
 }
 END_TEST
 
 START_TEST(s21_several_operators_5) {
-  char out[MAX_EXP_LEN + 1] = {0};
-  char* p = out;
-  ck_assert_int_eq(s21_validate("sin(30)+cos(60)++tan(45)", &p), 0);
+  ck_assert_int_eq(s21_exp_to_rpn("sin(30)+cos(60)++tan(45)") == NULL, 1);
 }
 END_TEST
 
 START_TEST(s21_several_operators_6) {
-  char out[MAX_EXP_LEN + 1] = {0};
-  char* p = out;
-  ck_assert_int_eq(s21_validate("acos(0.5)++asin(0.5)+atan(1)", &p), 0);
+  ck_assert_int_eq(s21_exp_to_rpn("acos(0.5)++asin(0.5)+atan(1)") == NULL, 1);
 }
 END_TEST
 
 START_TEST(s21_several_operators_7) {
-  char out[MAX_EXP_LEN + 1] = {0};
-  char* p = out;
-  ck_assert_int_eq(s21_validate("(2+3)((5-2))+(3+4)(2-1)", &p), 0);
+  ck_assert_int_eq(s21_exp_to_rpn("(2+3)((5-2))+(3+4)(2-1)") == NULL, 1);
 }
 END_TEST
 
 START_TEST(s21_several_operators_8) {
-  char out[MAX_EXP_LEN + 1] = {0};
-  char* p = out;
-  ck_assert_int_eq(s21_validate("sqrt(16+9*2)*3)/4", &p), 0);
+  ck_assert_int_eq(s21_exp_to_rpn("sqrt(16+9*2)*3)/4") == NULL, 1);
 }
 END_TEST
 
 START_TEST(s21_several_operators_9) {
-  char out[MAX_EXP_LEN + 1] = {0};
-  char* p = out;
-  ck_assert_int_eq(s21_validate("ln(2)+log(10)++log(2)", &p), 0);
+  ck_assert_int_eq(s21_exp_to_rpn("ln(2)+log(10)++log(2)") == NULL, 1);
 }
 END_TEST
 START_TEST(s21_functions_without_parentheses_0) {
-  char out[MAX_EXP_LEN + 1] = {0};
-  char* p = out;
-  ck_assert_int_eq(s21_validate("cos30+sin45*tan60", &p), 0);
+  ck_assert_int_eq(s21_exp_to_rpn("cos30+sin45*tan60") == NULL, 1);
 }
 END_TEST
 
 START_TEST(s21_functions_without_parentheses_1) {
-  char out[MAX_EXP_LEN + 1] = {0};
-  char* p = out;
-  ck_assert_int_eq(s21_validate("sqrt16+sqrt9*2", &p), 0);
+  ck_assert_int_eq(s21_exp_to_rpn("sqrt16+sqrt9*2") == NULL, 1);
 }
 END_TEST
 
 START_TEST(s21_functions_without_parentheses_2) {
-  char out[MAX_EXP_LEN + 1] = {0};
-  char* p = out;
-  ck_assert_int_eq(s21_validate("ln2+log10-acos0.5", &p), 0);
+  ck_assert_int_eq(s21_exp_to_rpn("ln2+log10-acos0.5") == NULL, 1);
 }
 END_TEST
 
 START_TEST(s21_functions_without_parentheses_3) {
-  char out[MAX_EXP_LEN + 1] = {0};
-  char* p = out;
-  ck_assert_int_eq(s21_validate("sin30*cos60+tan45", &p), 0);
+  ck_assert_int_eq(s21_exp_to_rpn("sin30*cos60+tan45") == NULL, 1);
 }
 END_TEST
 
 START_TEST(s21_functions_without_parentheses_4) {
-  char out[MAX_EXP_LEN + 1] = {0};
-  char* p = out;
-  ck_assert_int_eq(s21_validate("acos0.5+asin0.5+atan1", &p), 0);
+  ck_assert_int_eq(s21_exp_to_rpn("acos0.5+asin0.5+atan1") == NULL, 1);
 }
 END_TEST
 
 START_TEST(s21_functions_without_parentheses_5) {
-  char out[MAX_EXP_LEN + 1] = {0};
-  char* p = out;
-  ck_assert_int_eq(s21_validate("sqrt16+9*2-3", &p), 0);
+  ck_assert_int_eq(s21_exp_to_rpn("sqrt16+9*2-3") == NULL, 1);
 }
 END_TEST
 
 START_TEST(s21_functions_without_parentheses_6) {
-  char out[MAX_EXP_LEN + 1] = {0};
-  char* p = out;
-  ck_assert_int_eq(s21_validate("ln(e^5)+log102", &p), 0);
+  ck_assert_int_eq(s21_exp_to_rpn("ln(e^5)+log102") == NULL, 1);
 }
 END_TEST
 
 START_TEST(s21_functions_without_parentheses_7) {
-  char out[MAX_EXP_LEN + 1] = {0};
-  char* p = out;
-  ck_assert_int_eq(s21_validate("acos0.5+asin0.5", &p), 0);
+  ck_assert_int_eq(s21_exp_to_rpn("acos0.5+asin0.5") == NULL, 1);
 }
 END_TEST
 
 START_TEST(s21_functions_without_parentheses_8) {
-  char out[MAX_EXP_LEN + 1] = {0};
-  char* p = out;
-  ck_assert_int_eq(s21_validate("cos45*sin30+tan60", &p), 0);
+  ck_assert_int_eq(s21_exp_to_rpn("cos45*sin30+tan60") == NULL, 1);
 }
 END_TEST
 
 START_TEST(s21_functions_without_parentheses_9) {
-  char out[MAX_EXP_LEN + 1] = {0};
-  char* p = out;
-  ck_assert_int_eq(s21_validate("sqrt16+sqrt(9*2)", &p), 0);
+  ck_assert_int_eq(s21_exp_to_rpn("sqrt16+sqrt(9*2)") == NULL, 1);
 }
 END_TEST
 START_TEST(s21_expression_ends_on_operator_0) {
-  char out[MAX_EXP_LEN + 1] = {0};
-  char* p = out;
-  ck_assert_int_eq(s21_validate("cos(30)+sin(45)*tan(60)+cos", &p), 0);
+  ck_assert_int_eq(s21_exp_to_rpn("cos(30)+sin(45)*tan(60)+cos") == NULL, 1);
 }
 END_TEST
 START_TEST(s21_two_decimal_points_0) {
-  char out[MAX_EXP_LEN + 1] = {0};
-  char* p = out;
-  ck_assert_int_eq(s21_validate("2+2.25+3.25.48-3", &p), 0);
+  ck_assert_int_eq(s21_exp_to_rpn("2+2.25+3.25.48-3") == NULL, 1);
 }
 END_TEST
 START_TEST(s21_loose_decimal_points_0) {
-  char out[MAX_EXP_LEN + 1] = {0};
-  char* p = out;
-  ck_assert_int_eq(s21_validate("cos(30).sin(5)", &p), 0);
+  ck_assert_int_eq(s21_exp_to_rpn("cos(30).sin(5)") == NULL, 1);
 }
 END_TEST
 
 START_TEST(s21_loose_decimal_points_1) {
-  char out[MAX_EXP_LEN + 1] = {0};
-  char* p = out;
-  ck_assert_int_eq(s21_validate("cos(30).5+2", &p), 0);
+  ck_assert_int_eq(s21_exp_to_rpn("cos(30).5+2") == NULL, 1);
 }
 END_TEST
 
 START_TEST(s21_loose_decimal_points_2) {
-  char out[MAX_EXP_LEN + 1] = {0};
-  char* p = out;
-  ck_assert_int_eq(s21_validate(".5-8", &p), 0);
+  ck_assert_int_eq(s21_exp_to_rpn(".5-8") == NULL, 1);
 }
 END_TEST
 
 START_TEST(s21_loose_decimal_points_3) {
-  char out[MAX_EXP_LEN + 1] = {0};
-  char* p = out;
-  ck_assert_int_eq(s21_validate("5+7-2^2.", &p), 0);
+  ck_assert_int_eq(s21_exp_to_rpn("5+7-2^2.") == NULL, 1);
 }
 END_TEST
 
