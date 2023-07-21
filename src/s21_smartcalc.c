@@ -10,7 +10,6 @@
 enum {
   S21_NONE,
   S21_NUMBER,
-  S21_X = 120,
   S21_OPEN_PARENTHESIS = 97,  // char 'a'
   S21_CLOSE_PARENTHESIS,
   S21_DIV,
@@ -27,7 +26,8 @@ enum {
   S21_ATAN,
   S21_SQRT,
   S21_LN,
-  S21_LOG  // char 'p'
+  S21_LOG,  // char 'q'
+  S21_X = 120
 };
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * *
@@ -42,7 +42,9 @@ static bool s21_is_value(int type) {
   return type == S21_NUMBER || type == S21_X;
 }
 
-static bool s21_is_function(int type) { return type >= S21_COS; }
+static bool s21_is_function(int type) {
+  return type >= S21_COS && type < S21_X;
+}
 
 static bool s21_is_unary_operator(int type) {
   return type == S21_PLUS || type == S21_MINUS;
@@ -205,7 +207,8 @@ static int s21_validate(char *str, char **out) {
     tokens_count++;
   }
 
-  if (!res || parentheses_count || (prev_token_type >= S21_PLUS)) {
+  if (!res || parentheses_count ||
+      (prev_token_type >= S21_PLUS && prev_token_type != S21_X)) {
     tokens_count = 0;
     **out = '\0';
   } else {
