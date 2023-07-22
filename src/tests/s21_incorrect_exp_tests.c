@@ -4,7 +4,6 @@
  */
 
 #include "s21_calc_tests.h"
-
 START_TEST(s21_mismatched_brackets_0) {
   ck_assert_int_eq(s21_exp_to_rpn("(2+3*((5-2)+(3+4)*(2-1)") == NULL, 1);
 }
@@ -239,6 +238,56 @@ START_TEST(s21_two_decimal_points_0) {
   ck_assert_int_eq(s21_exp_to_rpn("2+2.25+3.25.48-3") == NULL, 1);
 }
 END_TEST
+
+START_TEST(s21_two_decimal_points_1) {
+  ck_assert_int_eq(s21_exp_to_rpn("1..5 + 2") == NULL, 1);
+}
+END_TEST
+
+START_TEST(s21_two_decimal_points_2) {
+  ck_assert_int_eq(s21_exp_to_rpn("3.4.5 - 1") == NULL, 1);
+}
+END_TEST
+
+START_TEST(s21_two_decimal_points_3) {
+  ck_assert_int_eq(s21_exp_to_rpn("6..7 * 4") == NULL, 1);
+}
+END_TEST
+
+START_TEST(s21_two_decimal_points_4) {
+  ck_assert_int_eq(s21_exp_to_rpn("2 / 3..1") == NULL, 1);
+}
+END_TEST
+
+START_TEST(s21_two_decimal_points_5) {
+  ck_assert_int_eq(s21_exp_to_rpn("sin(30.2.3)") == NULL, 1);
+}
+END_TEST
+
+START_TEST(s21_two_decimal_points_6) {
+  ck_assert_int_eq(s21_exp_to_rpn("cos(4..56)") == NULL, 1);
+}
+END_TEST
+
+START_TEST(s21_two_decimal_points_7) {
+  ck_assert_int_eq(s21_exp_to_rpn("tan(5..89)") == NULL, 1);
+}
+END_TEST
+
+START_TEST(s21_two_decimal_points_8) {
+  ck_assert_int_eq(s21_exp_to_rpn("54..23 + sqrt(16)") == NULL, 1);
+}
+END_TEST
+
+START_TEST(s21_two_decimal_points_9) {
+  ck_assert_int_eq(s21_exp_to_rpn("log(10..10)") == NULL, 1);
+}
+END_TEST
+
+START_TEST(s21_two_decimal_points_10) {
+  ck_assert_int_eq(s21_exp_to_rpn("ln(23..34)") == NULL, 1);
+}
+END_TEST
 START_TEST(s21_loose_decimal_points_0) {
   ck_assert_int_eq(s21_exp_to_rpn("cos(30).sin(5)") == NULL, 1);
 }
@@ -259,15 +308,65 @@ START_TEST(s21_loose_decimal_points_3) {
 }
 END_TEST
 
-Suite* s21_incorrect_exp_tests(void) {
-  Suite* s1 = suite_create(PRE_TEST_HEADER "S21_INCORRECT" POST_TEST_HEADER);
-  TCase* tc1_1 = tcase_create("S21_MISMATCHED_BRACKETS");
-  TCase* tc1_2 = tcase_create("S21_INCORRECT_UNARY");
-  TCase* tc1_3 = tcase_create("S21_SEVERAL_OPERATORS");
-  TCase* tc1_4 = tcase_create("S21_FUNCTIONS_WITHOUT_PARENTHESES");
-  TCase* tc1_5 = tcase_create("S21_EXPRESSION_ENDS_ON_OPERATOR");
-  TCase* tc1_6 = tcase_create("S21_TWO_DECIMAL_POINTS");
-  TCase* tc1_7 = tcase_create("S21_LOOSE_DECIMAL_POINTS");
+START_TEST(s21_loose_decimal_points_4) {
+  ck_assert_int_eq(s21_exp_to_rpn(". + 5") == NULL, 1);
+}
+END_TEST
+
+START_TEST(s21_loose_decimal_points_5) {
+  ck_assert_int_eq(s21_exp_to_rpn("6 * .") == NULL, 1);
+}
+END_TEST
+
+START_TEST(s21_loose_decimal_points_6) {
+  ck_assert_int_eq(s21_exp_to_rpn("sqrt(.)") == NULL, 1);
+}
+END_TEST
+
+START_TEST(s21_loose_decimal_points_7) {
+  ck_assert_int_eq(s21_exp_to_rpn(". / 3") == NULL, 1);
+}
+END_TEST
+
+START_TEST(s21_loose_decimal_points_8) {
+  ck_assert_int_eq(s21_exp_to_rpn("sin(.)") == NULL, 1);
+}
+END_TEST
+
+START_TEST(s21_loose_decimal_points_9) {
+  ck_assert_int_eq(s21_exp_to_rpn("log(.)") == NULL, 1);
+}
+END_TEST
+
+START_TEST(s21_loose_decimal_points_10) {
+  ck_assert_int_eq(s21_exp_to_rpn("2 + . * 4") == NULL, 1);
+}
+END_TEST
+
+START_TEST(s21_loose_decimal_points_11) {
+  ck_assert_int_eq(s21_exp_to_rpn("- 2 / .") == NULL, 1);
+}
+END_TEST
+
+START_TEST(s21_loose_decimal_points_12) {
+  ck_assert_int_eq(s21_exp_to_rpn("tan(45).") == NULL, 1);
+}
+END_TEST
+
+START_TEST(s21_loose_decimal_points_13) {
+  ck_assert_int_eq(s21_exp_to_rpn(".sin(45)") == NULL, 1);
+}
+END_TEST
+
+Suite *s21_incorrect_exp_tests(void) {
+  Suite *s1 = suite_create(PRE_TEST_HEADER "S21_INCORRECT" POST_TEST_HEADER);
+  TCase *tc1_1 = tcase_create("S21_MISMATCHED_BRACKETS");
+  TCase *tc1_2 = tcase_create("S21_INCORRECT_UNARY");
+  TCase *tc1_3 = tcase_create("S21_SEVERAL_OPERATORS");
+  TCase *tc1_4 = tcase_create("S21_FUNCTIONS_WITHOUT_PARENTHESES");
+  TCase *tc1_5 = tcase_create("S21_EXPRESSION_ENDS_ON_OPERATOR");
+  TCase *tc1_6 = tcase_create("S21_TWO_DECIMAL_POINTS");
+  TCase *tc1_7 = tcase_create("S21_LOOSE_DECIMAL_POINTS");
 
   suite_add_tcase(s1, tc1_1);
   tcase_add_test(tc1_1, s21_mismatched_brackets_0);
@@ -323,11 +422,31 @@ Suite* s21_incorrect_exp_tests(void) {
   tcase_add_test(tc1_5, s21_expression_ends_on_operator_0);
   suite_add_tcase(s1, tc1_6);
   tcase_add_test(tc1_6, s21_two_decimal_points_0);
+  tcase_add_test(tc1_6, s21_two_decimal_points_1);
+  tcase_add_test(tc1_6, s21_two_decimal_points_2);
+  tcase_add_test(tc1_6, s21_two_decimal_points_3);
+  tcase_add_test(tc1_6, s21_two_decimal_points_4);
+  tcase_add_test(tc1_6, s21_two_decimal_points_5);
+  tcase_add_test(tc1_6, s21_two_decimal_points_6);
+  tcase_add_test(tc1_6, s21_two_decimal_points_7);
+  tcase_add_test(tc1_6, s21_two_decimal_points_8);
+  tcase_add_test(tc1_6, s21_two_decimal_points_9);
+  tcase_add_test(tc1_6, s21_two_decimal_points_10);
   suite_add_tcase(s1, tc1_7);
   tcase_add_test(tc1_7, s21_loose_decimal_points_0);
   tcase_add_test(tc1_7, s21_loose_decimal_points_1);
   tcase_add_test(tc1_7, s21_loose_decimal_points_2);
   tcase_add_test(tc1_7, s21_loose_decimal_points_3);
+  tcase_add_test(tc1_7, s21_loose_decimal_points_4);
+  tcase_add_test(tc1_7, s21_loose_decimal_points_5);
+  tcase_add_test(tc1_7, s21_loose_decimal_points_6);
+  tcase_add_test(tc1_7, s21_loose_decimal_points_7);
+  tcase_add_test(tc1_7, s21_loose_decimal_points_8);
+  tcase_add_test(tc1_7, s21_loose_decimal_points_9);
+  tcase_add_test(tc1_7, s21_loose_decimal_points_10);
+  tcase_add_test(tc1_7, s21_loose_decimal_points_11);
+  tcase_add_test(tc1_7, s21_loose_decimal_points_12);
+  tcase_add_test(tc1_7, s21_loose_decimal_points_13);
 
   return s1;
 }
