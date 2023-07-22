@@ -54,14 +54,10 @@ static int s21_get_priority(char type) {
   int res = 2;
   if (s21_is_unary_operator(type)) {
     res = 1;
-  } else if (s21_is_function(type)) {
-    res = 4;
   } else if (type == S21_EXP) {
     res = 3;
   } else if (type == S21_OPEN_PARENTHESIS || type == S21_CLOSE_PARENTHESIS) {
     res = -1;
-  } else {
-    res = 2;
   }
   return res;
 }
@@ -320,7 +316,7 @@ static struct token *s21_validated_exp_to_rpn(char *exp, int exp_count) {
                *exp_token == S21_OPEN_PARENTHESIS) {
       // A function or a left parenthesis – push it onto the stack
       s21_push(&stack, 0, *exp_token);
-    } else if (s21_is_operator(*exp_token) || s21_is_function(*exp_token)) {
+    } else if (s21_is_operator(*exp_token)) {
       // Operator (O1):
       // While there is an token-operator O2 at the top of the
       // stack, that has greater or equal precedence than O1, pop O2 from the
