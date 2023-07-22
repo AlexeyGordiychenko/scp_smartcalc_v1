@@ -100,7 +100,7 @@ static int s21_parse_operator_function(char **s) {
   }
   if (!res) {
     char *func[] = {"mod",  "cos",  "sin", "tan", "acos", "asin",
-                    "atan", "sqrt", "log", "ln",  NULL};
+                    "atan", "sqrt", "ln",  "log", NULL};
     for (int i = 0; func[i] != NULL && res == S21_NONE; i++) {
       int len = strlen(func[i]);
       if (strncmp(*s, func[i], len) == 0) {
