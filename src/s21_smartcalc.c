@@ -219,76 +219,76 @@ static int s21_validate(char *str, char **out) {
  * RPN FUNCTIONS
  * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
-static void print_type(char type, double value) {
-  switch (type) {
-    case S21_NUMBER:
-      printf("%g", value);
-      break;
-    case S21_X:
-      printf("x");
-      break;
-    case S21_OPEN_PARENTHESIS:
-      printf("(");
-      break;
-    case S21_CLOSE_PARENTHESIS:
-      printf(")");
-      break;
-    case S21_DIV:
-      printf("/");
-      break;
-    case S21_MUL:
-      printf("*");
-      break;
-    case S21_EXP:
-      printf("^");
-      break;
-    case S21_PLUS:
-      printf("+");
-      break;
-    case S21_MINUS:
-      printf("-");
-      break;
-    case S21_MOD:
-      printf("mod");
-      break;
-    case S21_COS:
-      printf("cos");
-      break;
-    case S21_SIN:
-      printf("sin");
-      break;
-    case S21_TAN:
-      printf("tan");
-      break;
-    case S21_ACOS:
-      printf("acos");
-      break;
-    case S21_ASIN:
-      printf("asin");
-      break;
-    case S21_ATAN:
-      printf("atan");
-      break;
-    case S21_SQRT:
-      printf("sqrt");
-      break;
-    case S21_LN:
-      printf("ln");
-      break;
-    case S21_LOG:
-      printf("log");
-      break;
-    default:
-      break;
-  }
-}
+// static void print_type(char type, double value) {
+//   switch (type) {
+//     case S21_NUMBER:
+//       printf("%g", value);
+//       break;
+//     case S21_X:
+//       printf("x");
+//       break;
+//     case S21_OPEN_PARENTHESIS:
+//       printf("(");
+//       break;
+//     case S21_CLOSE_PARENTHESIS:
+//       printf(")");
+//       break;
+//     case S21_DIV:
+//       printf("/");
+//       break;
+//     case S21_MUL:
+//       printf("*");
+//       break;
+//     case S21_EXP:
+//       printf("^");
+//       break;
+//     case S21_PLUS:
+//       printf("+");
+//       break;
+//     case S21_MINUS:
+//       printf("-");
+//       break;
+//     case S21_MOD:
+//       printf("mod");
+//       break;
+//     case S21_COS:
+//       printf("cos");
+//       break;
+//     case S21_SIN:
+//       printf("sin");
+//       break;
+//     case S21_TAN:
+//       printf("tan");
+//       break;
+//     case S21_ACOS:
+//       printf("acos");
+//       break;
+//     case S21_ASIN:
+//       printf("asin");
+//       break;
+//     case S21_ATAN:
+//       printf("atan");
+//       break;
+//     case S21_SQRT:
+//       printf("sqrt");
+//       break;
+//     case S21_LN:
+//       printf("ln");
+//       break;
+//     case S21_LOG:
+//       printf("log");
+//       break;
+//     default:
+//       break;
+//   }
+// }
 
 static void s21_fill_and_move_token(struct token **token, double value,
                                     char type) {
   (*token)->value = value;
   (*token)->type = type;
-  print_type(type, value);
-  printf(" ");
+  // print_type(type, value);
+  // printf(" ");
   (*token)++;
 }
 
