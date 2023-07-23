@@ -124,7 +124,7 @@ static bool s21_parse_number(char **p_str, char **p_out) {
   return res;
 }
 
-static void s21_output_token(char **p_out, char ctt, char ptt) {
+static int s21_output_token(char **p_out, char ctt, char ptt) {
   bool print = true;
   if (ptt == S21_NONE || ptt == S21_OPEN_PARENTHESIS) {
     // add zero for unary minus -2 -> 0-2
@@ -136,6 +136,7 @@ static void s21_output_token(char **p_out, char ctt, char ptt) {
   if (print) {
     *p_out += sprintf(*p_out, "#%c", ctt);
   }
+  return !print;
 }
 
 static bool s21_is_token_valid(char ctt, char ptt) {
@@ -197,7 +198,8 @@ static int s21_validate(char *str, char **out) {
     }
     res = res && s21_is_token_valid(curr_token_type, prev_token_type);
     if (res && curr_token_type != S21_NUMBER) {
-      s21_output_token(&p_out, curr_token_type, prev_token_type);
+      tokens_count +=
+          s21_output_token(&p_out, curr_token_type, prev_token_type);
     }
     prev_token_type = curr_token_type;
     tokens_count++;
