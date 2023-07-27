@@ -124,19 +124,22 @@ static bool s21_parse_number(char **p_str, char **p_out) {
   return res;
 }
 
-static int s21_output_token(char **p_out, char ctt, char ptt) {
-  bool print = true;
-  if (ptt == S21_NONE || ptt == S21_OPEN_PARENTHESIS) {
+static void s21_output_token(char **p_out, int *token_count, char ctt,
+                             char ptt) {
+  if (ctt == S21_NUMBER) {
+    (*token_count)++;
+  } else if ((ptt == S21_NONE || ptt == S21_OPEN_PARENTHESIS) &&
+             (ctt == S21_MINUS || ctt == S21_PLUS)) {
     // add zero for unary minus -2 -> 0-2
+    // skip unary plus
     if (ctt == S21_MINUS) {
       *p_out += sprintf(*p_out, "#0#%c", ctt);
-      print = false;
+      (*token_count) += 2;
     }
-  }
-  if (print) {
+  } else {
     *p_out += sprintf(*p_out, "#%c", ctt);
+    (*token_count)++;
   }
-  return !print;
 }
 
 static bool s21_is_token_valid(char ctt, char ptt) {
@@ -197,12 +200,10 @@ static int s21_validate(char *str, char **out) {
       curr_token_type = s21_parse_operator_function(&p_str);
     }
     res = res && s21_is_token_valid(curr_token_type, prev_token_type);
-    if (res && curr_token_type != S21_NUMBER) {
-      tokens_count +=
-          s21_output_token(&p_out, curr_token_type, prev_token_type);
+    if (res) {
+      s21_output_token(&p_out, &tokens_count, curr_token_type, prev_token_type);
     }
     prev_token_type = curr_token_type;
-    tokens_count++;
   }
 
   if (!res || parentheses_count ||
@@ -303,7 +304,7 @@ static void s21_move_from_stack_to_rpn(struct token **stack,
 
 static struct token *s21_validated_exp_to_rpn(char *exp, int exp_count) {
   struct token *stack = NULL;
-  struct token *rpn = calloc(exp_count + 1, sizeof(struct token));
+  struct token *rpn = malloc((exp_count + 1) * sizeof(struct token));
   struct token *p_rpn = rpn;
   char *exp_token = strtok(exp, "#");
   while (exp_token) {
@@ -344,14 +345,13 @@ static struct token *s21_validated_exp_to_rpn(char *exp, int exp_count) {
         s21_move_from_stack_to_rpn(&stack, &p_rpn);
       }
     }
-    //
     exp_token = strtok(NULL, "#");
   }
 
   while (stack) {
     s21_move_from_stack_to_rpn(&stack, &p_rpn);
   }
-
+  p_rpn->type = S21_NONE;
   return rpn;
 }
 
@@ -419,7 +419,7 @@ static double s21_calculate_binary(double value1, double value2, char type) {
 }
 
 double s21_calculate(struct token *rpn, double x) {
-  struct token *numbers = calloc(1, sizeof(struct token));
+  struct token *numbers = NULL;
   struct token *p_rpn = rpn;
   char type = S21_NONE;
   while (p_rpn && (type = p_rpn->type) != S21_NONE) {
@@ -442,7 +442,6 @@ double s21_calculate(struct token *rpn, double x) {
   struct token *top = s21_pop(&numbers);
   double res = top->value;
   free(top);
-  free(numbers);
   return res;
 }
 
