@@ -89,7 +89,7 @@ static int s21_peek_type(token *root) { return root->type; }
  * VALIDATION OF AN EXPRESSION
  * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
-static int s21_parse_operator_function(char **s) {
+static int s21_parse_operator_function(const char **s) {
   char res = S21_NONE;
   char *op = "/*^+-";
   for (int i = 0; *op && !res; op++, i++) {
@@ -112,7 +112,7 @@ static int s21_parse_operator_function(char **s) {
   return res;
 }
 
-static bool s21_parse_number(char **p_str, char **p_out) {
+static bool s21_parse_number(const char **p_str, char **p_out) {
   *(*p_out)++ = '#';
   double num = 0;
   int len = 0;
@@ -175,12 +175,12 @@ static bool s21_is_token_valid(char ctt, char ptt) {
   return res;
 }
 
-static int s21_validate(char *str, char **out) {
+static int s21_validate(const char *str, char **out) {
   int parentheses_count = 0, tokens_count = 0;
   bool res = true;
   char prev_token_type = S21_NONE;
   char *p_out = *out;
-  for (char *p_str = str; *p_str != '\0' && res;) {
+  for (const char *p_str = str; *p_str != '\0' && res;) {
     char curr_token_type = S21_NONE;
     if (*p_str == '(') {
       parentheses_count++;
@@ -445,7 +445,7 @@ double s21_calculate(struct token *rpn, double x) {
   return res;
 }
 
-struct token *s21_exp_to_rpn(char *exp) {
+struct token *s21_exp_to_rpn(const char *exp) {
   char *exp_validated = malloc(strlen(exp) * 3 + 1);
   int exp_count = s21_validate(exp, &exp_validated);
   struct token *rpn = NULL;
