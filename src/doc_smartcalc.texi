@@ -20,7 +20,8 @@ It also has a buit-in credit calculator.
 @node Usage
 @section Usage
 
-To use the calculator just run ./s21_smartcalc
+First you need to install the program.
+Open the folder with the source files of the program. Run make install. After the program done installing just run ./install/s21_SmartCalc
 
 @node Operations
 @section Operations
