@@ -58,7 +58,7 @@ s21_smartcalc_app::s21_smartcalc_app(QWidget *parent)
   connect(ui->pushButton_atan, SIGNAL(clicked()), this,
           SLOT(s21_button_to_result_with_bracket()));
   connect(ui->pushButton_mod, SIGNAL(clicked()), this,
-          SLOT(s21_button_to_result_with_bracket()));
+          SLOT(s21_button_to_result()));
   connect(ui->pushButton_log, SIGNAL(clicked()), this,
           SLOT(s21_button_to_result_with_bracket()));
   connect(ui->pushButton_ln, SIGNAL(clicked()), this,
