@@ -1,0 +1,59 @@
+\input texinfo
+@setfilename S21_SmartCalc_v1.0.info
+@settitle S21 SmartCalc v1.0 Program Documentation
+
+@menu
+* Introduction::     
+* Usage::            
+* Operations:: 
+* Graph plotting:: 
+* Credit calculation:: 
+@end menu
+
+@node Introduction
+@section Introduction
+
+This program is a calculator, developed in the C programming language using structured programming with GUI implementation based on QT 5.15.3. It has basic arithmetic operations such as add/subtract and multiply/divide and the ability to calculate arithmetic expressions by following the order, as well as some mathematical functions (sine, cosine, logarithm, etc.).
+Besides calculating expressions, it also supports the use of the x variable and the graphing of the corresponding function.
+It also has a buit-in credit calculator.
+
+@node Usage
+@section Usage
+
+To use the calculator just run ./s21_smartcalc
+
+@node Operations
+@section Operations
+
+@c @table @code
+@c @item myFirstItem
+@c This is the description for myFirstItem.
+@c @item mySecondItem
+@c This is the description for mySecondItem.
+@c @end table
+
+@multitable @columnfractions 0.2 0.2 0.3 0.2
+@item Brackets @tab (a + b) @tab Cosine @tab cos(x)
+@item Addition @tab a + b @tab Sine @tab sin(x)
+@item Subtraction @tab a - b @tab Tangent @tab tan(x)
+@item Multiplication @tab a * b @tab Arc cosine @tab acos(x)
+@item Division @tab a / b @tab Arc sine @tab asin(x)
+@item Power @tab a ^ b @tab Arc tangent @tab atan(x)
+@item Modulus @tab a mod b @tab Square root @tab sqrt(x)
+@item Unary plus @tab +a @tab Natural logarithm @tab ln(x)
+@item Unary minus @tab -a @tab Common logarithm @tab log(x)
+
+@end multitable
+
+@node Graph plotting
+@section Graph plotting
+
+To plot a graph just choose "Graph" at the bottom of the form and set X values "from" and "to", then press "=".
+
+@node Credit calculation
+@section Credit calculation
+
+To calculate a credit you need to input total credit amount, term, interest rate, select type (annuity, differentiated).
+Then press the button "Calculate" and the program will output monthly payment, overpayment on credit, total payment.
+
+@bye

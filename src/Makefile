@@ -30,6 +30,9 @@ LIB=s21_smartcalc.a
 TEST=test
 TEST_BUILD=test_build
 
+# Docs
+DOC=doc_smartcalc
+
 .PHONY: all $(TEST) $(TEST_BUILD) $(LIB) gcov_report clean rebuild clang_n clang_i valgrind
 
 all: $(LIB)
@@ -73,8 +76,12 @@ lcov_report: $(TEST_BUILD)
 	genhtml -o $(GCOV_DIR) $(GCOV_DIR)/Coverage_Report.info 
 	open $(GCOV_DIR)/index.html
 
+dvi:
+	texi2dvi --clean --pdf $(DOC).texi
+	open $(DOC).pdf
+
 clean:
-	rm -rf $(OBJ_DIR) $(GCOV_DIR) $(TEST) $(LIB)
+	rm -rf $(OBJ_DIR) $(GCOV_DIR) $(TEST) $(LIB) $(DOC).pdf
 
 rebuild: clean all
 
