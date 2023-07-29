@@ -17,6 +17,8 @@ SRC_DIR=.
 OBJ_DIR=obj
 OBJ_DIR_GCOV=obj/$(GCOV_DIR)
 OBJ_DIR_TEST=obj/$(TEST_DIR)
+BUILD_DIR=build
+INSTALL_DIR=install
 
 # Files
 SRCS=$(wildcard $(SRC_DIR)/s21_*.c)
@@ -62,6 +64,17 @@ $(OBJ_DIR_GCOV)/%.o: $(SRC_DIR)/%.c
 	@mkdir -p $(OBJ_DIR_GCOV)
 	$(CC) $(CFLAGS) $(GCOVFLAGS) -c $< -o $@
 
+build:
+	@mkdir -p $(BUILD_DIR)
+	cd ./$(BUILD_DIR)/ && qmake ../ && make
+
+install: build
+	@mkdir -p $(INSTALL_DIR)
+	@cp $(BUILD_DIR)/$(PROGRAM) $(INSTALL_DIR)/$(PROGRAM)
+
+uninstall:
+	rm -rf $(INSTALL_DIR)
+
 gcov_report: $(TEST_BUILD)
 	./$(TEST) || true
 	mkdir -p $(GCOV_DIR)
@@ -88,7 +101,7 @@ dist:
 	rm -rf $(PROGRAM)/
 
 clean:
-	rm -rf $(OBJ_DIR) $(GCOV_DIR) $(TEST) $(LIB) $(DOC).pdf
+	rm -rf $(OBJ_DIR) $(GCOV_DIR) $(BUILD_DIR) $(TEST) $(LIB) $(DOC).pdf
 
 rebuild: clean all
 
