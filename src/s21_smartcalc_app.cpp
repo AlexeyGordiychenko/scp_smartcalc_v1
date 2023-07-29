@@ -189,7 +189,7 @@ void s21_smartcalc_app::s21_calc_result() {
       bool x_min_ok, x_max_ok;
       double x_value_min = ui->valueXMin->text().toDouble(&x_min_ok);
       double x_value_max = ui->valueXMax->text().toDouble(&x_max_ok);
-      if (x_min_ok && x_max_ok) {
+      if (x_min_ok && x_max_ok && x_value_min <= x_value_max) {
         s21_graphWindow->on_to_draw_button_clicked(rpn, x_value_min,
                                                    x_value_max);
         s21_graphWindow->show();
