@@ -26,6 +26,7 @@ OBJS_TEST=$(patsubst $(TEST_DIR)/%.c,$(OBJ_DIR_TEST)/%.o,$(SRCS_TEST))
 OBJS_GCOV=$(patsubst $(SRC_DIR)/%.c,$(OBJ_DIR_GCOV)/%.o,$(SRCS))
 
 # Builds
+PROGRAM=S21_SmartCalc_v1.0
 LIB=s21_smartcalc.a
 TEST=test
 TEST_BUILD=test_build
@@ -79,6 +80,12 @@ lcov_report: $(TEST_BUILD)
 dvi:
 	texi2dvi --clean --pdf $(DOC).texi
 	open $(DOC).pdf
+
+dist:
+	mkdir -p $(PROGRAM)/src
+	cp Makefile s21_*.c s21_*.h *.pro *.cpp *.ui *.user $(PROGRAM)/src 2>/dev/null || true
+	tar cvzf SmartCalc_v1.0.tgz $(PROGRAM)/
+	rm -rf $(PROGRAM)/
 
 clean:
 	rm -rf $(OBJ_DIR) $(GCOV_DIR) $(TEST) $(LIB) $(DOC).pdf
