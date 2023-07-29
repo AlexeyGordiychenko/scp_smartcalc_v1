@@ -4,7 +4,7 @@ CFLAGS=-Wall -Wextra -Werror -std=c11 -g -fmax-errors=1
 LDFLAGS=-lcheck -pthread -lm
 
 ifeq ($(shell uname), Linux)
-	LDFLAGS += -lsubunit
+	LDFLAGS += -lsubunit -lrt
 endif
 
 # Converage
