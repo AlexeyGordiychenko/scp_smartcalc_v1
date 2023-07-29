@@ -29,19 +29,15 @@ OBJS_GCOV=$(patsubst $(SRC_DIR)/%.c,$(OBJ_DIR_GCOV)/%.o,$(SRCS))
 
 # Builds
 PROGRAM=s21_SmartCalc
-LIB=s21_smartcalc.a
 TEST=test
 TEST_BUILD=test_build
 
 # Docs
 DOC=doc_smartcalc
 
-.PHONY: all $(TEST) $(TEST_BUILD) $(LIB) gcov_report clean rebuild clang_n clang_i valgrind
+.PHONY: all $(TEST) $(TEST_BUILD) build install uninstall gcov_report lcov_report dvi dist clean rebuild clang_n clang_i valgrind
 
-all: $(LIB)
-
-main: main.c $(LIB)
-	$(CC) $(CFLAGS) $^ $(LDFLAGS) -o $@
+all: install
 
 $(TEST_BUILD): $(OBJS_GCOV) $(OBJS_TEST)
 	$(CC) $(CFLAGS) $^ $(LDFLAGS) $(GCOVFLAGS) -o $(TEST)
@@ -49,9 +45,6 @@ $(TEST_BUILD): $(OBJS_GCOV) $(OBJS_TEST)
 $(TEST): $(TEST_BUILD)
 	./$@
 
-$(LIB): $(OBJS)
-	ar rcs $(LIB) $^
-	
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
 	@mkdir -p $(OBJ_DIR)
 	$(CC) $(CFLAGS) -c $< -o $@
@@ -106,10 +99,15 @@ clean:
 rebuild: clean all
 
 clang_n:
-	clang-format -n --style=Google *.[ch] $(SRC_DIR)/*.[ch] $(TEST_DIR)/*.[ch]
+	clang-format -n --style=Google $(SRC_DIR)/*.[ch] $(TEST_DIR)/*.[ch]
+	clang-format -n --style=Google $(SRC_DIR)/*.cpp
 
 clang_i:
-	clang-format -i --style=Google *.[ch] $(SRC_DIR)/*.[ch] $(TEST_DIR)/*.[ch]
+	clang-format -i --style=Google $(SRC_DIR)/*.[ch] $(TEST_DIR)/*.[ch]
+	clang-format -i --style=Google $(SRC_DIR)/*.cpp
 
 valgrind: $(TEST_BUILD)
 	valgrind --tool=memcheck --leak-check=yes ./$(TEST)
+
+valgrind_macos: $(TEST_BUILD)
+	leaks -atExit -- ./$(TEST) | grep LEAK:
