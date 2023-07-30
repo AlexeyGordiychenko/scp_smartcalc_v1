@@ -1,5 +1,13 @@
 # SmartCalc v1.0 (Individual project)
 
+## Score:
+The final score is 115% (max for base and bonus part 1, bonus part 2 wasn't implemented).
+
+The calc was developed with frontend on QT 5.15.3 (C++) and backend on C.
+
+![calc](misc/calc.png)
+![calc_credit](misc/calc_credit.png)
+
 ## Task
 
 Implementation of an extended version of the usual calculator in the C programming language using structured programming. In addition to basic arithmetic operations such as add/subtract and multiply/divide, the calculator must have the ability to calculate arithmetic expressions by following the order, as well as some mathematical functions (sine, cosine, logarithm, etc.).
