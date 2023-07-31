@@ -1,9 +1,9 @@
-#include "s21_calc_tests.h"
+#include "scp_calc_tests.h"
 
 int main(void) {
   int failed = 0;
-  Suite *calc_tests[] = {s21_incorrect_exp_tests(), s21_correct_exp_tests(),
-                         s21_credit_tests(), NULL};
+  Suite *calc_tests[] = {scp_incorrect_exp_tests(), scp_correct_exp_tests(),
+                         scp_credit_tests(), NULL};
 
   for (int i = 0; calc_tests[i] != NULL; i++) {
     SRunner *sr = srunner_create(calc_tests[i]);

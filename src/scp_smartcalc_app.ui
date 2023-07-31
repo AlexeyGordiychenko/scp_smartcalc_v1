@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>s21_smartcalc_app</class>
- <widget class="QMainWindow" name="s21_smartcalc_app">
+ <class>scp_smartcalc_app</class>
+ <widget class="QMainWindow" name="scp_smartcalc_app">
   <property name="enabled">
    <bool>true</bool>
   </property>
@@ -20,7 +20,7 @@
    </sizepolicy>
   </property>
   <property name="windowTitle">
-   <string>s21_smartcalc_app</string>
+   <string>scp_smartcalc_app</string>
   </property>
   <property name="styleSheet">
    <string notr="true">background-color: rgb(23, 28, 37);

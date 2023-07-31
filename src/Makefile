@@ -21,14 +21,14 @@ BUILD_DIR=build
 INSTALL_DIR=install
 
 # Files
-SRCS=$(wildcard $(SRC_DIR)/s21_*.c)
-SRCS_TEST=$(wildcard $(TEST_DIR)/s21_*.c)
+SRCS=$(wildcard $(SRC_DIR)/scp_*.c)
+SRCS_TEST=$(wildcard $(TEST_DIR)/scp_*.c)
 OBJS=$(patsubst $(SRC_DIR)/%.c,$(OBJ_DIR)/%.o,$(SRCS))
 OBJS_TEST=$(patsubst $(TEST_DIR)/%.c,$(OBJ_DIR_TEST)/%.o,$(SRCS_TEST))
 OBJS_GCOV=$(patsubst $(SRC_DIR)/%.c,$(OBJ_DIR_GCOV)/%.o,$(SRCS))
 
 # Builds
-PROGRAM=s21_SmartCalc
+PROGRAM=scp_SmartCalc
 TEST=test
 TEST_BUILD=test_build
 
@@ -89,7 +89,7 @@ dvi:
 
 dist:
 	mkdir -p $(PROGRAM)/src
-	@cp Makefile s21_*.c s21_*.h *.pro *.cpp *.ui *.user $(PROGRAM)/src 2>/dev/null || true
+	@cp Makefile scp_*.c scp_*.h *.pro *.cpp *.ui *.user $(PROGRAM)/src 2>/dev/null || true
 	tar cvzf $(PROGRAM).tgz $(PROGRAM)/
 	rm -rf $(PROGRAM)/
 

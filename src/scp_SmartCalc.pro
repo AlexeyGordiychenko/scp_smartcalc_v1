@@ -13,21 +13,21 @@ CONFIG += c++11
 SOURCES += \
     main.cpp \
     qcustomplot.cpp \
-    s21_credit.c \
-    s21_graphwindow.cpp \
-    s21_smartcalc.c \
-    s21_smartcalc_app.cpp
+    scp_credit.c \
+    scp_graphwindow.cpp \
+    scp_smartcalc.c \
+    scp_smartcalc_app.cpp
 
 HEADERS += \
     qcustomplot.h \
-    s21_credit.h \
-    s21_graphwindow.h \
-    s21_smartcalc.h \
-    s21_smartcalc_app.h
+    scp_credit.h \
+    scp_graphwindow.h \
+    scp_smartcalc.h \
+    scp_smartcalc_app.h
 
 FORMS += \
-    s21_graphwindow.ui \
-    s21_smartcalc_app.ui
+    scp_graphwindow.ui \
+    scp_smartcalc_app.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

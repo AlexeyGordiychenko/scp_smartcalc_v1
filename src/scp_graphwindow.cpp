@@ -1,10 +1,10 @@
-#include "s21_graphwindow.h"
+#include "scp_graphwindow.h"
 
-#include "./ui_s21_graphwindow.h"
+#include "./ui_scp_graphwindow.h"
 #include "qcustomplot.h"
 
 extern "C" {
-#include "s21_smartcalc.h"
+#include "scp_smartcalc.h"
 }
 
 GraphWindow::GraphWindow(QWidget* parent)
@@ -25,7 +25,7 @@ void GraphWindow::on_to_draw_button_clicked(token* rpn, double x_min,
   double h = 0.1;
   for (double X = x_min; X < x_max; X += h) {
     x.push_back(X);
-    double Y = s21_calculate(rpn, X);
+    double Y = scp_calculate(rpn, X);
     y.push_back(Y);
   }
 

@@ -6,7 +6,7 @@
 #include "QVector"
 
 extern "C" {
-#include "s21_smartcalc.h"
+#include "scp_smartcalc.h"
 }
 
 namespace Ui {

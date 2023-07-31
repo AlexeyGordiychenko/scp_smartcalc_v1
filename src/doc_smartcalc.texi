@@ -1,5 +1,5 @@
 \input texinfo
-@setfilename S21_SmartCalc_v1.0.info
+@setfilename SCP_SmartCalc_v1.0.info
 @settitle S21 SmartCalc v1.0 Program Documentation
 
 @menu
@@ -21,7 +21,7 @@ It also has a buit-in credit calculator.
 @section Usage
 
 First you need to install the program.
-Open the folder with the source files of the program. Run make install. After the program done installing just run ./install/s21_SmartCalc
+Open the folder with the source files of the program. Run make install. After the program done installing just run ./install/scp_SmartCalc
 
 @node Operations
 @section Operations

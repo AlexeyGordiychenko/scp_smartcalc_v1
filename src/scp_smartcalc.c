@@ -1,4 +1,4 @@
-#include "s21_smartcalc.h"
+#include "scp_smartcalc.h"
 
 #include <ctype.h>
 #include <math.h>
@@ -8,55 +8,55 @@
 #include <string.h>
 
 enum {
-  S21_NONE,
-  S21_NUMBER,
-  S21_OPEN_PARENTHESIS = 97,  // char 'a'
-  S21_CLOSE_PARENTHESIS,
-  S21_DIV,
-  S21_MUL,
-  S21_EXP,
-  S21_PLUS,
-  S21_MINUS,
-  S21_MOD,
-  S21_COS,
-  S21_SIN,
-  S21_TAN,
-  S21_ACOS,
-  S21_ASIN,
-  S21_ATAN,
-  S21_SQRT,
-  S21_LN,
-  S21_LOG,  // char 'q'
-  S21_X = 120
+  SCP_NONE,
+  SCP_NUMBER,
+  SCP_OPEN_PARENTHESIS = 97,  // char 'a'
+  SCP_CLOSE_PARENTHESIS,
+  SCP_DIV,
+  SCP_MUL,
+  SCP_EXP,
+  SCP_PLUS,
+  SCP_MINUS,
+  SCP_MOD,
+  SCP_COS,
+  SCP_SIN,
+  SCP_TAN,
+  SCP_ACOS,
+  SCP_ASIN,
+  SCP_ATAN,
+  SCP_SQRT,
+  SCP_LN,
+  SCP_LOG,  // char 'q'
+  SCP_X = 120
 };
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * *
  * MISC FUNCTIONS
  * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
-static bool s21_is_operator(int type) {
-  return type >= S21_DIV && type <= S21_MOD;
+static bool scp_is_operator(int type) {
+  return type >= SCP_DIV && type <= SCP_MOD;
 }
 
-static bool s21_is_value(int type) {
-  return type == S21_NUMBER || type == S21_X;
+static bool scp_is_value(int type) {
+  return type == SCP_NUMBER || type == SCP_X;
 }
 
-static bool s21_is_function(int type) {
-  return type >= S21_COS && type < S21_X;
+static bool scp_is_function(int type) {
+  return type >= SCP_COS && type < SCP_X;
 }
 
-static bool s21_is_unary_operator(int type) {
-  return type == S21_PLUS || type == S21_MINUS;
+static bool scp_is_unary_operator(int type) {
+  return type == SCP_PLUS || type == SCP_MINUS;
 }
 
-static int s21_get_priority(char type) {
+static int scp_get_priority(char type) {
   int res = 2;
-  if (s21_is_unary_operator(type)) {
+  if (scp_is_unary_operator(type)) {
     res = 1;
-  } else if (type == S21_EXP) {
+  } else if (type == SCP_EXP) {
     res = 3;
-  } else if (type == S21_OPEN_PARENTHESIS || type == S21_CLOSE_PARENTHESIS) {
+  } else if (type == SCP_OPEN_PARENTHESIS || type == SCP_CLOSE_PARENTHESIS) {
     res = -1;
   }
   return res;
@@ -66,7 +66,7 @@ static int s21_get_priority(char type) {
  * STACK FUNCTIONS
  * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
-static void s21_push(struct token **root, double value, char type) {
+static void scp_push(struct token **root, double value, char type) {
   struct token *new_token = malloc(sizeof(token));
   new_token->value = value;
   new_token->type = type;
@@ -74,7 +74,7 @@ static void s21_push(struct token **root, double value, char type) {
   *root = new_token;
 }
 
-static token *s21_pop(struct token **root) {
+static token *scp_pop(struct token **root) {
   token *top_token = NULL;
   if (root != NULL) {
     top_token = *root;
@@ -83,28 +83,28 @@ static token *s21_pop(struct token **root) {
   return top_token;
 }
 
-static int s21_peek_type(token *root) { return root->type; }
+static int scp_peek_type(token *root) { return root->type; }
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * *
  * VALIDATION OF AN EXPRESSION
  * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
-static int s21_parse_operator_function(const char **s) {
-  char res = S21_NONE;
+static int scp_parse_operator_function(const char **s) {
+  char res = SCP_NONE;
   char *op = "/*^+-";
   for (int i = 0; *op && !res; op++, i++) {
     if (**s == *op) {
-      res = S21_DIV + i;
+      res = SCP_DIV + i;
       (*s)++;
     }
   }
   if (!res) {
     char *func[] = {"mod",  "cos",  "sin", "tan", "acos", "asin",
                     "atan", "sqrt", "ln",  "log", NULL};
-    for (int i = 0; func[i] != NULL && res == S21_NONE; i++) {
+    for (int i = 0; func[i] != NULL && res == SCP_NONE; i++) {
       int len = strlen(func[i]);
       if (strncmp(*s, func[i], len) == 0) {
-        res = S21_MOD + i;
+        res = SCP_MOD + i;
         (*s) += len;
       }
     }
@@ -112,7 +112,7 @@ static int s21_parse_operator_function(const char **s) {
   return res;
 }
 
-static bool s21_parse_number(const char **p_str, char **p_out) {
+static bool scp_parse_number(const char **p_str, char **p_out) {
   *(*p_out)++ = '#';
   double num = 0;
   int len = 0;
@@ -124,15 +124,15 @@ static bool s21_parse_number(const char **p_str, char **p_out) {
   return res;
 }
 
-static void s21_output_token(char **p_out, int *token_count, char ctt,
+static void scp_output_token(char **p_out, int *token_count, char ctt,
                              char ptt) {
-  if (ctt == S21_NUMBER) {
+  if (ctt == SCP_NUMBER) {
     (*token_count)++;
-  } else if ((ptt == S21_NONE || ptt == S21_OPEN_PARENTHESIS) &&
-             (ctt == S21_MINUS || ctt == S21_PLUS)) {
+  } else if ((ptt == SCP_NONE || ptt == SCP_OPEN_PARENTHESIS) &&
+             (ctt == SCP_MINUS || ctt == SCP_PLUS)) {
     // add zero for unary minus -2 -> 0-2
     // skip unary plus
-    if (ctt == S21_MINUS) {
+    if (ctt == SCP_MINUS) {
       *p_out += sprintf(*p_out, "#0#%c", ctt);
       (*token_count) += 2;
     }
@@ -142,72 +142,72 @@ static void s21_output_token(char **p_out, int *token_count, char ctt,
   }
 }
 
-static bool s21_is_token_valid(char ctt, char ptt) {
+static bool scp_is_token_valid(char ctt, char ptt) {
   bool res = false;
-  if (ctt == S21_NONE) {
+  if (ctt == SCP_NONE) {
     res = false;
-  } else if (s21_is_value(ctt)) {
+  } else if (scp_is_value(ctt)) {
     // A number should be preceded by an operator or an opening parenthesis.
     res =
-        ptt == S21_NONE || s21_is_operator(ptt) || ptt == S21_OPEN_PARENTHESIS;
-  } else if (s21_is_operator(ctt)) {
+        ptt == SCP_NONE || scp_is_operator(ptt) || ptt == SCP_OPEN_PARENTHESIS;
+  } else if (scp_is_operator(ctt)) {
     // An operator should be preceded by a number or a close parenthesis.
-    res = s21_is_value(ptt) || ptt == S21_CLOSE_PARENTHESIS;
-    if (!res && s21_is_unary_operator(ctt)) {
+    res = scp_is_value(ptt) || ptt == SCP_CLOSE_PARENTHESIS;
+    if (!res && scp_is_unary_operator(ctt)) {
       // A unary operator can also be the first char or preceded by an
       // opening parenthesis
-      res = ptt == S21_NONE || ptt == S21_OPEN_PARENTHESIS;
+      res = ptt == SCP_NONE || ptt == SCP_OPEN_PARENTHESIS;
     }
-  } else if (ctt == S21_OPEN_PARENTHESIS) {
+  } else if (ctt == SCP_OPEN_PARENTHESIS) {
     // An opening parenthesis should be preceded by an operator or another
     // opening parenthesis.
-    res = ptt == S21_NONE || s21_is_operator(ptt) || s21_is_function(ptt) ||
-          ptt == S21_OPEN_PARENTHESIS;
-  } else if (ctt == S21_CLOSE_PARENTHESIS) {
+    res = ptt == SCP_NONE || scp_is_operator(ptt) || scp_is_function(ptt) ||
+          ptt == SCP_OPEN_PARENTHESIS;
+  } else if (ctt == SCP_CLOSE_PARENTHESIS) {
     // A closing parenthesis should be preceded by a number or another
     // closing parenthesis.
-    res = s21_is_value(ptt) || ptt == S21_CLOSE_PARENTHESIS;
-  } else if (s21_is_function(ctt)) {
+    res = scp_is_value(ptt) || ptt == SCP_CLOSE_PARENTHESIS;
+  } else if (scp_is_function(ctt)) {
     // A function should be preceded by a operator or an open parenthesis.
     res =
-        ptt == S21_NONE || s21_is_operator(ptt) || ptt == S21_OPEN_PARENTHESIS;
+        ptt == SCP_NONE || scp_is_operator(ptt) || ptt == SCP_OPEN_PARENTHESIS;
   }
   return res;
 }
 
-static int s21_validate(const char *str, char **out) {
+static int scp_validate(const char *str, char **out) {
   int parentheses_count = 0, tokens_count = 0;
   bool res = true;
-  char prev_token_type = S21_NONE;
+  char prev_token_type = SCP_NONE;
   char *p_out = *out;
   for (const char *p_str = str; *p_str != '\0' && res;) {
-    char curr_token_type = S21_NONE;
+    char curr_token_type = SCP_NONE;
     if (*p_str == '(') {
       parentheses_count++;
-      curr_token_type = S21_OPEN_PARENTHESIS;
+      curr_token_type = SCP_OPEN_PARENTHESIS;
       p_str++;
     } else if (*p_str == ')') {
-      curr_token_type = S21_CLOSE_PARENTHESIS;
+      curr_token_type = SCP_CLOSE_PARENTHESIS;
       res = --parentheses_count >= 0;
       p_str++;
     } else if isdigit (*p_str) {
-      curr_token_type = S21_NUMBER;
-      res = s21_parse_number(&p_str, &p_out);
+      curr_token_type = SCP_NUMBER;
+      res = scp_parse_number(&p_str, &p_out);
     } else if (*p_str == 'x') {
-      curr_token_type = S21_X;
+      curr_token_type = SCP_X;
       p_str++;
     } else {
-      curr_token_type = s21_parse_operator_function(&p_str);
+      curr_token_type = scp_parse_operator_function(&p_str);
     }
-    res = res && s21_is_token_valid(curr_token_type, prev_token_type);
+    res = res && scp_is_token_valid(curr_token_type, prev_token_type);
     if (res) {
-      s21_output_token(&p_out, &tokens_count, curr_token_type, prev_token_type);
+      scp_output_token(&p_out, &tokens_count, curr_token_type, prev_token_type);
     }
     prev_token_type = curr_token_type;
   }
 
   if (!res || parentheses_count ||
-      (prev_token_type >= S21_PLUS && prev_token_type != S21_X)) {
+      (prev_token_type >= SCP_PLUS && prev_token_type != SCP_X)) {
     tokens_count = 0;
     **out = '\0';
   } else {
@@ -222,61 +222,61 @@ static int s21_validate(const char *str, char **out) {
 
 // static void print_type(char type, double value) {
 //   switch (type) {
-//     case S21_NUMBER:
+//     case SCP_NUMBER:
 //       printf("%g", value);
 //       break;
-//     case S21_X:
+//     case SCP_X:
 //       printf("x");
 //       break;
-//     case S21_OPEN_PARENTHESIS:
+//     case SCP_OPEN_PARENTHESIS:
 //       printf("(");
 //       break;
-//     case S21_CLOSE_PARENTHESIS:
+//     case SCP_CLOSE_PARENTHESIS:
 //       printf(")");
 //       break;
-//     case S21_DIV:
+//     case SCP_DIV:
 //       printf("/");
 //       break;
-//     case S21_MUL:
+//     case SCP_MUL:
 //       printf("*");
 //       break;
-//     case S21_EXP:
+//     case SCP_EXP:
 //       printf("^");
 //       break;
-//     case S21_PLUS:
+//     case SCP_PLUS:
 //       printf("+");
 //       break;
-//     case S21_MINUS:
+//     case SCP_MINUS:
 //       printf("-");
 //       break;
-//     case S21_MOD:
+//     case SCP_MOD:
 //       printf("mod");
 //       break;
-//     case S21_COS:
+//     case SCP_COS:
 //       printf("cos");
 //       break;
-//     case S21_SIN:
+//     case SCP_SIN:
 //       printf("sin");
 //       break;
-//     case S21_TAN:
+//     case SCP_TAN:
 //       printf("tan");
 //       break;
-//     case S21_ACOS:
+//     case SCP_ACOS:
 //       printf("acos");
 //       break;
-//     case S21_ASIN:
+//     case SCP_ASIN:
 //       printf("asin");
 //       break;
-//     case S21_ATAN:
+//     case SCP_ATAN:
 //       printf("atan");
 //       break;
-//     case S21_SQRT:
+//     case SCP_SQRT:
 //       printf("sqrt");
 //       break;
-//     case S21_LN:
+//     case SCP_LN:
 //       printf("ln");
 //       break;
-//     case S21_LOG:
+//     case SCP_LOG:
 //       printf("log");
 //       break;
 //     default:
@@ -284,7 +284,7 @@ static int s21_validate(const char *str, char **out) {
 //   }
 // }
 
-static void s21_fill_and_move_token(struct token **token, double value,
+static void scp_fill_and_move_token(struct token **token, double value,
                                     char type) {
   (*token)->value = value;
   (*token)->type = type;
@@ -293,16 +293,16 @@ static void s21_fill_and_move_token(struct token **token, double value,
   (*token)++;
 }
 
-static void s21_move_from_stack_to_rpn(struct token **stack,
+static void scp_move_from_stack_to_rpn(struct token **stack,
                                        struct token **p_rpn) {
-  struct token *top = s21_pop(stack);
+  struct token *top = scp_pop(stack);
   if (top) {
-    s21_fill_and_move_token(p_rpn, top->value, top->type);
+    scp_fill_and_move_token(p_rpn, top->value, top->type);
     free(top);
   }
 }
 
-static struct token *s21_validated_exp_to_rpn(char *exp, int exp_count) {
+static struct token *scp_validated_exp_to_rpn(char *exp, int exp_count) {
   struct token *stack = NULL;
   struct token *rpn = malloc((exp_count + 1) * sizeof(struct token));
   struct token *p_rpn = rpn;
@@ -311,25 +311,25 @@ static struct token *s21_validated_exp_to_rpn(char *exp, int exp_count) {
     // If the token is:
     if (isdigit(*exp_token)) {
       // A number – put it into the output queue
-      s21_fill_and_move_token(&p_rpn, atof(exp_token), S21_NUMBER);
+      scp_fill_and_move_token(&p_rpn, atof(exp_token), SCP_NUMBER);
     } else if (*exp_token == 'x') {
       // A number – put it into the output queue
-      s21_fill_and_move_token(&p_rpn, 0, S21_X);
-    } else if (s21_is_function(*exp_token) ||
-               *exp_token == S21_OPEN_PARENTHESIS) {
+      scp_fill_and_move_token(&p_rpn, 0, SCP_X);
+    } else if (scp_is_function(*exp_token) ||
+               *exp_token == SCP_OPEN_PARENTHESIS) {
       // A function or a left parenthesis – push it onto the stack
-      s21_push(&stack, 0, *exp_token);
-    } else if (s21_is_operator(*exp_token)) {
+      scp_push(&stack, 0, *exp_token);
+    } else if (scp_is_operator(*exp_token)) {
       // Operator (O1):
       // While there is an token-operator O2 at the top of the
       // stack, that has greater or equal precedence than O1, pop O2 from the
       // stack into the output queue, push O1 onto the stack
       while (stack &&
-             s21_get_priority(stack->type) >= s21_get_priority(*exp_token)) {
-        s21_move_from_stack_to_rpn(&stack, &p_rpn);
+             scp_get_priority(stack->type) >= scp_get_priority(*exp_token)) {
+        scp_move_from_stack_to_rpn(&stack, &p_rpn);
       }
-      s21_push(&stack, 0, *exp_token);
-    } else if (*exp_token == S21_CLOSE_PARENTHESIS) {
+      scp_push(&stack, 0, *exp_token);
+    } else if (*exp_token == SCP_CLOSE_PARENTHESIS) {
       // A right parenthesis:
       // While the token at the top of the stack is not a left parenthesis, pop
       // the token-operators from the stack into the output queue.
@@ -337,21 +337,21 @@ static struct token *s21_validated_exp_to_rpn(char *exp, int exp_count) {
       // If there is a function token at the top of the stack, then pop the
       // function from the stack into the output queue
 
-      while (stack && s21_peek_type(stack) != S21_OPEN_PARENTHESIS) {
-        s21_move_from_stack_to_rpn(&stack, &p_rpn);
+      while (stack && scp_peek_type(stack) != SCP_OPEN_PARENTHESIS) {
+        scp_move_from_stack_to_rpn(&stack, &p_rpn);
       }
-      if (stack) free(s21_pop(&stack));
-      if (stack && s21_is_function(s21_peek_type(stack))) {
-        s21_move_from_stack_to_rpn(&stack, &p_rpn);
+      if (stack) free(scp_pop(&stack));
+      if (stack && scp_is_function(scp_peek_type(stack))) {
+        scp_move_from_stack_to_rpn(&stack, &p_rpn);
       }
     }
     exp_token = strtok(NULL, "#");
   }
 
   while (stack) {
-    s21_move_from_stack_to_rpn(&stack, &p_rpn);
+    scp_move_from_stack_to_rpn(&stack, &p_rpn);
   }
-  p_rpn->type = S21_NONE;
+  p_rpn->type = SCP_NONE;
   return rpn;
 }
 
@@ -359,98 +359,98 @@ static struct token *s21_validated_exp_to_rpn(char *exp, int exp_count) {
  * CALCULATION FUNCTIONS
  * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
-static double s21_calculate_unary(double value, char type) {
+static double scp_calculate_unary(double value, char type) {
   double res = 0;
   switch (type) {
-    case S21_COS:
+    case SCP_COS:
       res = cos(value);
       break;
-    case S21_SIN:
+    case SCP_SIN:
       res = sin(value);
       break;
-    case S21_TAN:
+    case SCP_TAN:
       res = tan(value);
       break;
-    case S21_ACOS:
+    case SCP_ACOS:
       res = acos(value);
       break;
-    case S21_ASIN:
+    case SCP_ASIN:
       res = asin(value);
       break;
-    case S21_ATAN:
+    case SCP_ATAN:
       res = atan(value);
       break;
-    case S21_SQRT:
+    case SCP_SQRT:
       res = sqrt(value);
       break;
-    case S21_LN:
+    case SCP_LN:
       res = log(value);
       break;
-    case S21_LOG:
+    case SCP_LOG:
       res = log10(value);
       break;
   }
   return res;
 }
 
-static double s21_calculate_binary(double value1, double value2, char type) {
+static double scp_calculate_binary(double value1, double value2, char type) {
   double res = 0;
   switch (type) {
-    case S21_DIV:
+    case SCP_DIV:
       res = value1 / value2;
       break;
-    case S21_MUL:
+    case SCP_MUL:
       res = value1 * value2;
       break;
-    case S21_EXP:
+    case SCP_EXP:
       res = pow(value1, value2);
       break;
-    case S21_PLUS:
+    case SCP_PLUS:
       res = value1 + value2;
       break;
-    case S21_MINUS:
+    case SCP_MINUS:
       res = value1 - value2;
       break;
-    case S21_MOD:
+    case SCP_MOD:
       res = fmod(value1, value2);
       break;
   }
   return res;
 }
 
-double s21_calculate(struct token *rpn, double x) {
+double scp_calculate(struct token *rpn, double x) {
   struct token *numbers = NULL;
   struct token *p_rpn = rpn;
-  char type = S21_NONE;
-  while (p_rpn && (type = p_rpn->type) != S21_NONE) {
-    if (s21_is_value(type)) {
-      s21_push(&numbers, (type == S21_NUMBER) ? p_rpn->value : x, S21_NUMBER);
-    } else if (type >= S21_COS) {
-      struct token *top = s21_pop(&numbers);
-      s21_push(&numbers, s21_calculate_unary(top->value, type), S21_NUMBER);
+  char type = SCP_NONE;
+  while (p_rpn && (type = p_rpn->type) != SCP_NONE) {
+    if (scp_is_value(type)) {
+      scp_push(&numbers, (type == SCP_NUMBER) ? p_rpn->value : x, SCP_NUMBER);
+    } else if (type >= SCP_COS) {
+      struct token *top = scp_pop(&numbers);
+      scp_push(&numbers, scp_calculate_unary(top->value, type), SCP_NUMBER);
       free(top);
     } else {
-      struct token *top2 = s21_pop(&numbers);
-      struct token *top1 = s21_pop(&numbers);
-      s21_push(&numbers, s21_calculate_binary(top1->value, top2->value, type),
-               S21_NUMBER);
+      struct token *top2 = scp_pop(&numbers);
+      struct token *top1 = scp_pop(&numbers);
+      scp_push(&numbers, scp_calculate_binary(top1->value, top2->value, type),
+               SCP_NUMBER);
       free(top1);
       free(top2);
     }
     p_rpn++;
   }
-  struct token *top = s21_pop(&numbers);
+  struct token *top = scp_pop(&numbers);
   double res = top->value;
   free(top);
   return res;
 }
 
-struct token *s21_exp_to_rpn(const char *exp) {
+struct token *scp_exp_to_rpn(const char *exp) {
   char *exp_validated = malloc(strlen(exp) * 3 + 1);
-  int exp_count = s21_validate(exp, &exp_validated);
+  int exp_count = scp_validate(exp, &exp_validated);
   struct token *rpn = NULL;
   if (exp_count > 0) {
-    rpn = s21_validated_exp_to_rpn(exp_validated, exp_count);
+    rpn = scp_validated_exp_to_rpn(exp_validated, exp_count);
   }
   free(exp_validated);
   return rpn;
