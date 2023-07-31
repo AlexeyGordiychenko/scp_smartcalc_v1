@@ -207,7 +207,7 @@ static int scp_validate(const char *str, char **out) {
   }
 
   if (!res || parentheses_count ||
-      (prev_token_type >= SCP_PLUS && prev_token_type != SCP_X)) {
+      (prev_token_type >= SCP_DIV && prev_token_type != SCP_X)) {
     tokens_count = 0;
     **out = '\0';
   } else {
